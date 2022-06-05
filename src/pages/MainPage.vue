@@ -1,7 +1,7 @@
 <template>
   <div class="main-page">
     <div id="something">
-      <calc-culator />
+      <calc-culator :services="services" @toggle-active="toggleActive" />
     </div>
   </div>
 </template>
@@ -11,6 +11,36 @@ import CalcCulator from "@/components/Calc-price.vue";
 export default {
   components: {
     CalcCulator,
+  },
+  data() {
+    return {
+      services: [
+        {
+          id: 1,
+          name: "Главная страница",
+          price: 1000,
+          active: true,
+        },
+        {
+          id: 2,
+          name: "Контакты",
+          price: 5000,
+          active: false,
+        },
+        {
+          id: 3,
+          name: "Сообщения",
+          price: 2000,
+          active: false,
+        },
+      ],
+    };
+  },
+  methods: {
+    toggleActive(id) {
+      const service = this.services.find((service) => service.id === id);
+      service.active = !service.active;
+    },
   },
 };
 </script>
