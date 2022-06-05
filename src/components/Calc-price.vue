@@ -3,18 +3,17 @@
     <h1 class="heading">Калькулятор</h1>
     <ul class="services">
       <li
-        v-for="(service, index) in services"
-        :key="index"
+        v-for="service in services"
+        :key="service.id"
         class="services__item"
-        @click="toggleActive(service)"
-        @toggle="toggleActive"
         :class="{ active: service.active }"
+        @click="$emit('toggle-active', service.id)"
       >
         <span>{{ service.name }}</span> <span>{{ service.price }} $</span>
       </li>
     </ul>
     <p class="total">
-      <span>Total:</span> <span>{{ total() }} $</span>
+      <span>Total:</span> <span>{{ total }} $</span>
     </p>
   </div>
 </template>
@@ -25,42 +24,17 @@ export default {
   props: {
     services: {
       type: Array,
-      default: () => [
-        {
-          name: "Главная страница",
-          price: 1000,
-          active: true,
-        },
-        {
-          name: "Контакты",
-          price: 5000,
-          active: false,
-        },
-        {
-          name: "Сообщения",
-          price: 2000,
-          active: false,
-        },
-      ],
+      default: () => [],
     },
   },
-  methods: {
-    toggleActive: function (s) {
-      s.active = !s.active;
-    },
-    toggleActiv() {
-      this.$emit("toggle", this.active);
-    },
-    total: function () {
-      var total = 0;
-
-      this.services.forEach(function (s) {
-        if (s.active) {
-          total += s.price;
+  computed: {
+    total() {
+      return this.services.reduce((sum, service) => {
+        if (service.active) {
+          sum += service.price;
         }
-      });
-
-      return total;
+        return sum;
+      }, 0);
     },
   },
 };
